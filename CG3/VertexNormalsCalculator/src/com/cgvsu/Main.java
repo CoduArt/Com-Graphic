@@ -8,13 +8,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-
-        Path fileName = Path.of("ObjReaderInitial/3DModels/Faceform/WrapSkull.obj");
+        Path fileName;
+        if (args[0].equals("--input")) {
+            fileName = Path.of(args[1] + ".obj");
+        } else {
+            throw new RuntimeException("object not specified");
+        }
         String fileContent = Files.readString(fileName);
 
         System.out.println("Loading model ...");
@@ -26,7 +29,7 @@ public class Main {
         System.out.println("Polygons: " + model.polygons.size());
         System.out.println("------------------------------");
         System.out.println("finding vertex normals ...");
-        ArrayList<Vector3f> normals = VerticesNormals.searchingVerticesNormals(model);
+        ArrayList<Vector3f> normals = VertexNormalsCalculator.calculateNormals(model);
         System.out.println("Calculated normals: " + normals.size());
 //        System.out.println("example: " + Arrays.toString(normals.get(0).getVector()));
     }
